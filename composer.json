@@ -12,6 +12,7 @@
     }
   ],
   "extra": {
+    "installer-types": ["project"],
     "installer-paths": {
       "bedrock/": [
           "roots/bedrock"

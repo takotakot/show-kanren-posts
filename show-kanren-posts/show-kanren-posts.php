@@ -28,4 +28,4 @@ define( 'SHOW_KANREN_POSTS_VERSION', '1.0.0' );
 define( 'SHOW_KANREN_POSTS_VERSION__PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SHOW_KANREN_POSTS_VERSION__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
-require_once SHOW_KANREN_POSTS_VERSION__PLUGIN_DIR . 'class.show-kanren-posts.php';
+require_once SHOW_KANREN_POSTS_VERSION__PLUGIN_DIR . 'class-show-kanren-posts.php';

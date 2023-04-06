@@ -30,6 +30,7 @@
     "wp-coding-standards/wpcs": "^2.3"
   },
   "require": {
-    "roots/bedrock": "^1.21"
+    "roots/bedrock": "^1.21",
+    "oomphinc/composer-installers-extender": "^2.0"
   }
 }

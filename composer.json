@@ -34,5 +34,9 @@
     "oomphinc/composer-installers-extender": "^2.0",
     "yoast/phpunit-polyfills": "^1.0",
     "wp-phpunit/wp-phpunit": "^6.2"
+  },
+  "scripts": {
+    "lint": "phpcs",
+    "test": "phpunit"
   }
 }

@@ -38,5 +38,10 @@
   "scripts": {
     "lint": "phpcs",
     "test": "phpunit"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/src"
+    }
   }
 }

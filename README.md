@@ -30,3 +30,16 @@ docker compose -f docker-compose.yml --env-file=docker_configs/.env.compose.deve
 ```
 git --git-dir= apply application_php.patch
 ```
+
+If there are some update with autoload's run:
+
+```
+composer dump-autoload
+```
+
+Run tests
+
+```
+# ./vendor/bin/phpunit
+composer test
+```

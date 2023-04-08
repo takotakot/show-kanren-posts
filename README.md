@@ -24,3 +24,22 @@ cp -n ./docker_configs/.env.example.local ./bedrock/.env.local
 ```
 docker compose -f docker-compose.yml --env-file=docker_configs/.env.compose.develop up -d
 ```
+
+### Unit testing
+
+```
+git --git-dir= apply application_php.patch
+```
+
+If there are some update with autoload's run:
+
+```
+composer dump-autoload
+```
+
+Run tests
+
+```
+# ./vendor/bin/phpunit
+composer test
+```

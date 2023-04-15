@@ -14,7 +14,7 @@ class Show_Kanren_Posts {
      * Register shortcodes
      */
     public function __construct() {
-		add_shortcode('kanren', array(&$this, 'kanrenFunc'));
+		add_shortcode('kanren', array(&$this, 'relatedPost'));
 	}
 
 	/**
@@ -43,8 +43,8 @@ class Show_Kanren_Posts {
 	/**
 	 * Show related post
 	 */
-	public function kanrenFunc($atts) {
-		return '<div>Hello, kanrenFunc!</div>';
+	public function relatedPost($atts) {
+		return '<div>Hello, relatedPost!</div>';
 	}
 
 }

@@ -23,4 +23,11 @@ class ShowKanrenPostsTest extends TestCase
     {
         $this->assertTrue(function_exists('add_action'));
     }
+
+	/** @test */
+	public function do_shortcode_processed() {
+		$shortcode    = '[kanren]';
+		$hellomessage = '<div>Hello, kanrenPost!</div>';
+		$this->assertEquals( $hellomessage, do_shortcode( $shortcode ) );
+	}
 }

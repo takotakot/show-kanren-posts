@@ -10,6 +10,13 @@
  */
 class Show_Kanren_Posts {
 
+    /**
+     * Register shortcodes
+     */
+    public function __construct() {
+		add_shortcode('kanren', array(&$this, 'kanrenFunc'));
+	}
+
 	/**
 	 * Query string for sort
 	 *
@@ -32,4 +39,12 @@ class Show_Kanren_Posts {
 	private static function init_hooks() {
 		self::$initiated = true;
 	}
+
+	/**
+	 * Show related post
+	 */
+	public function kanrenFunc($atts) {
+		return '<div>Hello, kanrenFunc!</div>';
+	}
+
 }

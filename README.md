@@ -21,20 +21,9 @@ cp -n ./docker_configs/.env.local.example ./bedrock/.env.local
 ```
 \* Modify `docker_configs/.env.compose.develop` if needed.
 
-Prepare dummy information & Add defines below into testing.php.
-
+Recover deleted files after `composer install`.
 ```
-cp -n ./bedrock/config/environments/development.php ./bedrock/config/environments/testing.php
----
-// Connect container's DB from local for PHPUnit
-Config::define('DB_HOST', '127.0.0.1');
-
-// Required dummy info for PHPUnit
-define( 'WP_TESTS_DOMAIN', 'example.org' );
-define( 'WP_TESTS_EMAIL', 'admin@example.org' );
-define( 'WP_TESTS_TITLE', 'Test Blog' );
-define( 'WP_PHP_BINARY', 'php' );
----
+git checkout -- bedrock/config/environments/testing.php
 ```
 
 ```

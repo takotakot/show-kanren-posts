@@ -38,4 +38,11 @@ intermediate
 .idea
 cache
 vendor
-bedrock
+wordflow_data/*
+!wordflow_data/.gitkeep
+bedrock/*
+!bedrock/config/
+bedrock/config/*
+!bedrock/config/environments
+bedrock/config/environments/*
+!bedrock/config/environments/testing.php

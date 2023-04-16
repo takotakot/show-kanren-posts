@@ -43,5 +43,13 @@
     "psr-4": {
       "Tests\\": "tests/src"
     }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "composer/installers": true,
+      "roots/wordpress-core-installer": true,
+      "oomphinc/composer-installers-extender": true
+    }
   }
 }

@@ -25,9 +25,9 @@ class ShowKanrenPostsTest extends TestCase
     }
 
 	/** @test */
-	public function do_shortcode_processed() {
-		$shortcode    = '[kanren]';
-		$hellomessage = '<div>Hello, kanrenPost!</div>';
-		$this->assertEquals( $hellomessage, do_shortcode( $shortcode ) );
+	public function do_shortcode_without_options() {
+		$shortcode = '[kanren]';
+		$response = null;
+		$this->assertEquals( $response, do_shortcode( $shortcode ) );
 	}
 }

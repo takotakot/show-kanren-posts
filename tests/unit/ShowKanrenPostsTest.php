@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use Symfony\Component\DomCrawler\Crawler;
+
 /**
  * ShowKanrenPostsTest class
  */
@@ -31,8 +33,8 @@ class ShowKanrenPostsTest extends TestCase {
 	 */
 	public function do_shortcode_without_options() {
 		$shortcode = '[kanren]';
-		$response  = null;
-		$this->assertEquals( $response, do_shortcode( $shortcode ) );
+		$response  = '';
+		$this->assertSame( $response, do_shortcode( $shortcode ) );
 	}
 
 	/**
@@ -63,7 +65,22 @@ class ShowKanrenPostsTest extends TestCase {
 		$format .= '</div></a></div></div>';
 
 		$response = sprintf( $format, $post->ID, $title, $date );
-		$this->assertEquals( $response, do_shortcode( $shortcode ) );
+		$this->assertSame( $response, do_shortcode( $shortcode ) );
+	}
+
+	/**
+	 * @test
+	 *
+	 * Story: Five post_ids are given.
+	 * Expected: Each post is in single div(class: kanren) tag.
+	 */
+	public function do_shortcode_with_existing_postids() {
+		$ids       = $this->factory()->post->create_many( 5 );
+		$shortcode = '[kanren postid="' . implode( ',', $ids ) . '"]';
+		$html      = do_shortcode( $shortcode );
+		$crawler   = new Crawler( $html );
+		$response  = 5;
+		$this->assertSame( $response, count( $crawler->filter( '.kanren' ) ) );
 	}
 
 	/**
@@ -75,7 +92,7 @@ class ShowKanrenPostsTest extends TestCase {
 	public function do_shortcode_with_not_existing_postid() {
 		$shortcode = '[kanren postid="' . PHP_INT_MAX . '"]';
 		$response  = '<p>記事を取得できませんでした。記事IDをご確認ください。</p>';
-		$this->assertEquals( $response, do_shortcode( $shortcode ) );
+		$this->assertSame( $response, do_shortcode( $shortcode ) );
 	}
 
 	/**
@@ -108,7 +125,7 @@ class ShowKanrenPostsTest extends TestCase {
 
 		$response  = sprintf( $format, $post->ID, $title, $date );
 		$shortcode = '[kanren posturl="' . $post_url . '"]';
-		$this->assertEquals( $response, do_shortcode( $shortcode ) );
+		$this->assertSame( $response, do_shortcode( $shortcode ) );
 	}
 
 	/**
@@ -121,7 +138,7 @@ class ShowKanrenPostsTest extends TestCase {
 		$post_url  = 'http://localhost/?p=' . PHP_INT_MAX;
 		$shortcode = '[kanren posturl="' . $post_url . '"]';
 		$response  = '<p>記事を取得できませんでした。記事IDをご確認ください。</p>';
-		$this->assertEquals( $response, do_shortcode( $shortcode ) );
+		$this->assertSame( $response, do_shortcode( $shortcode ) );
 	}
 
 	/**
@@ -153,7 +170,7 @@ class ShowKanrenPostsTest extends TestCase {
 
 		$response  = sprintf( $format, $post->ID, $title, $date );
 		$shortcode = '[kanren pageurl="' . $page_url . '"]';
-		$this->assertEquals( $response, do_shortcode( $shortcode ) );
+		$this->assertSame( $response, do_shortcode( $shortcode ) );
 	}
 
 	/**
@@ -166,7 +183,7 @@ class ShowKanrenPostsTest extends TestCase {
 		$page_url  = 'http://localhost/?page_id=' . PHP_INT_MAX;
 		$shortcode = '[kanren pageurl="' . $page_url . '"]';
 		$response  = '<p>記事を取得できませんでした。記事IDをご確認ください。</p>';
-		$this->assertEquals( $response, do_shortcode( $shortcode ) );
+		$this->assertSame( $response, do_shortcode( $shortcode ) );
 	}
 
 	/**
@@ -185,7 +202,7 @@ class ShowKanrenPostsTest extends TestCase {
 		$src_url             = sprintf( '%s/%s', $upload_dir['baseurl'], $attachment_metadata['file'] );
 		$response            = sprintf( '<img width="640" height="360" src="%s" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" decoding="async" loading="lazy" />', $src_url );
 
-		$this->assertEquals( $response, $this->show_kanren_posts->get_thumbnail( $post->ID ) );
+		$this->assertSame( $response, $this->show_kanren_posts->get_thumbnail( $post->ID ) );
 		wp_delete_attachment( $attachment_id );
 	}
 
@@ -201,7 +218,29 @@ class ShowKanrenPostsTest extends TestCase {
 		$src       = get_theme_file_uri( $noimg_dir );
 		$response  = sprintf( '<img src="%s" width="485" height="300" class="wp-post-image wp-post-no_image archives-eyecatch-image" alt="NO IMAGE">', $src );
 
-		$this->assertEquals( $response, $this->show_kanren_posts->get_thumbnail( $post->ID ) );
+		$this->assertSame( $response, $this->show_kanren_posts->get_thumbnail( $post->ID ) );
 	}
 
+	/**
+	 * @test
+	 *
+	 * Story: Multiple shortcodes are called in a single post.
+	 * Expected: Each kanren post has each value associated with themselves.
+	 */
+	public function do_multiple_shortcodes_in_single_post() {
+		$values = array(
+			array( 'post_title' => 'post0' ),
+			array( 'post_title' => 'post1' ),
+			array( 'post_title' => 'post2' ),
+		);
+		foreach ( $values as $value ) {
+			$post      = $this->factory()->post->create_and_get( $value );
+			$shortcode = sprintf( '[kanren postid="%s"]', $post->ID );
+			$html      = do_shortcode( $shortcode );
+			$crawler   = new Crawler( $html );
+			$title     = $crawler->filter( '.related_article__ttl' )->text();
+			$response  = $value['post_title'];
+			$this->assertSame( $response, $title );
+		}
+	}
 }

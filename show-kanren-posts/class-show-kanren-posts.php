@@ -35,7 +35,7 @@ class Show_Kanren_Posts {
 	}
 
 	/**
-	 * Query string for sort
+	 * Initialized or not
 	 *
 	 * @var bool
 	 */
@@ -107,9 +107,9 @@ class Show_Kanren_Posts {
 	public function kanren_post( $atts ) {
 		$this->set_atts( $atts );
 		if ( $this->post_id === null && $this->page_id === null ) {
-			return null;
+			return '';
 		} else {
-			$out = '';
+			$out = '<div class="kanren';
 
 			$args = array(
 				'post_type'           => array( 'post', 'page' ),
@@ -126,6 +126,7 @@ class Show_Kanren_Posts {
 
 			$the_query = new WP_Query( $args );
 			if ( $the_query->have_posts() ) {
+				$out .= '">';
 				while ( $the_query->have_posts() ) {
 					$the_query->the_post();
 
@@ -142,17 +143,16 @@ class Show_Kanren_Posts {
 									: null;
 					$postttl   = sprintf( '<div class="related_article__ttl ttl">%s%s</div>', $postlabel, esc_attr( get_the_title() ) );
 
-					$out .= sprintf( '<div class="kanren">' );
 					$out .= sprintf( '<div class="related_article%s%s%s">', $this->labelclass, $this->type, $this->classname );
 					$out .= sprintf( '<a class="related_article__link no-icon" href="%s"%s>', $url, $this->target );
 					$out .= sprintf( '%s<div class="related_article__meta archives_post__meta inbox">', $postimg );
-					$out .= sprintf( '%s%s</div></a></div></div>', $postttl, $postdate );
+					$out .= sprintf( '%s%s</div></a></div>', $postttl, $postdate );
 				}
 				wp_reset_postdata();
 			} else {
-				$out = '<p>記事を取得できませんでした。記事IDをご確認ください。</p>';
+				$out .= ' nopost"><p>記事を取得できませんでした。記事IDをご確認ください。</p>';
 			}
-			return $out;
+			return sprintf('%s</div>', $out);
 		}
 	}
 
@@ -195,7 +195,6 @@ class Show_Kanren_Posts {
 			$noimg_class = 'wp-post-image wp-post-no_image archives-eyecatch-image';
 			$thumb       = sprintf( '<img src="%s" width="%d" height="%d" class="%s" alt="NO IMAGE">', $src, $width, $height, $noimg_class );
 		}
-		$thumb = str_replace( '100vw', '45vw', $thumb );
 		return $thumb;
 	}
 }

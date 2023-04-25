@@ -29,7 +29,7 @@ class ShowKanrenPostsTest extends TestCase {
 	 * @test
 	 *
 	 * Story: Do shortcode without any options(postid, pageid, etc,...).
-	 * Expected: null returned.
+	 * Expected: ''(empty string) returned.
 	 */
 	public function do_shortcode_without_options() {
 		$shortcode = '[kanren]';
@@ -79,7 +79,7 @@ class ShowKanrenPostsTest extends TestCase {
 		$shortcode = '[kanren postid="' . implode( ',', $ids ) . '"]';
 		$html      = do_shortcode( $shortcode );
 		$crawler   = new Crawler( $html );
-		$response  = 5;
+		$response  = 1;
 		$this->assertSame( $response, count( $crawler->filter( '.kanren' ) ) );
 	}
 
@@ -91,7 +91,7 @@ class ShowKanrenPostsTest extends TestCase {
 	 */
 	public function do_shortcode_with_not_existing_postid() {
 		$shortcode = '[kanren postid="' . PHP_INT_MAX . '"]';
-		$response  = '<p>記事を取得できませんでした。記事IDをご確認ください。</p>';
+		$response  = '<div class="kanren nopost"><p>記事を取得できませんでした。記事IDをご確認ください。</p></div>';
 		$this->assertSame( $response, do_shortcode( $shortcode ) );
 	}
 
@@ -137,7 +137,7 @@ class ShowKanrenPostsTest extends TestCase {
 	public function do_shortcode_with_posturl_not_existed() {
 		$post_url  = 'http://localhost/?p=' . PHP_INT_MAX;
 		$shortcode = '[kanren posturl="' . $post_url . '"]';
-		$response  = '<p>記事を取得できませんでした。記事IDをご確認ください。</p>';
+		$response  = '<div class="kanren nopost"><p>記事を取得できませんでした。記事IDをご確認ください。</p></div>';
 		$this->assertSame( $response, do_shortcode( $shortcode ) );
 	}
 
@@ -182,7 +182,7 @@ class ShowKanrenPostsTest extends TestCase {
 	public function do_shortcode_with_pageurl_not_existed() {
 		$page_url  = 'http://localhost/?page_id=' . PHP_INT_MAX;
 		$shortcode = '[kanren pageurl="' . $page_url . '"]';
-		$response  = '<p>記事を取得できませんでした。記事IDをご確認ください。</p>';
+		$response  = '<div class="kanren nopost"><p>記事を取得できませんでした。記事IDをご確認ください。</p></div>';
 		$this->assertSame( $response, do_shortcode( $shortcode ) );
 	}
 

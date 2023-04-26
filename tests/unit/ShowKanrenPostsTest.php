@@ -86,6 +86,49 @@ class ShowKanrenPostsTest extends TestCase {
 	/**
 	 * @test
 	 *
+	 * Story: 2 consecutive post id are given.
+	 * Expected: Each post is in single div(class: kanren) tag.
+	 */
+	public function do_shortcode_with_consecutive_postids() {
+		// post1
+		$post1      = $this->factory()->post->create_and_get(
+			array(
+				'post_title' => 'post1',
+				'post_type'  => 'post',
+			)
+		);
+		$shortcode1 = '[kanren postid="' . $post1->ID . '"]';
+		$title1     = $post1->post_title;
+		$date1      = date( 'Y.m.d', strtotime( $post1->post_date ) );
+
+		$format  = '';
+		$format .= '<div class="kanren">';
+		$format .= '<div class="related_article typesimple">';
+		$format .= '<a class="related_article__link no-icon" href="http://localhost/?p=%d">';
+		$format .= '<div class="related_article__meta archives_post__meta inbox">';
+		$format .= '<div class="related_article__ttl ttl">%s</div>';
+		$format .= '<time class="time__date gf">%s</time>';
+		$format .= '</div></a></div></div>';
+
+		$response = sprintf( $format, $post1->ID, $title1, $date1 );
+		$this->assertSame( $response, do_shortcode( $shortcode1 ) );
+
+		// post2
+		$post2      = $this->factory()->post->create_and_get(
+			array(
+				'post_title' => 'post2',
+				'post_type'  => 'revision',
+			)
+		);
+		$shortcode2 = '[kanren postid="' . $post2->ID . '"]';
+
+		$response = '<div class="kanren nopost"><p>記事を取得できませんでした。記事IDをご確認ください。</p></div>';
+		$this->assertSame( $response, do_shortcode( $shortcode2 ) );
+	}
+
+	/**
+	 * @test
+	 *
 	 * Story: Give a NOT existing postid.
 	 * Expected: A not-found message is returned.
 	 */

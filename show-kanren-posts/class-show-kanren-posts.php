@@ -35,29 +35,6 @@ class Show_Kanren_Posts {
 	}
 
 	/**
-	 * Initialized or not
-	 *
-	 * @var bool
-	 */
-	private static $initiated = false;
-
-	/**
-	 * Initialization
-	 */
-	public static function init() {
-		if ( ! self::$initiated ) {
-			self::init_hooks();
-		}
-	}
-
-	/**
-	 * Initializes WordPress hooks
-	 */
-	private static function init_hooks() {
-		self::$initiated = true;
-	}
-
-	/**
 	 * Set attributes
 	 *
 	 * @param array|string $atts Attributes in shortcode.

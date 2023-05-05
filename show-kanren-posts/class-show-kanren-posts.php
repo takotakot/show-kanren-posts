@@ -10,19 +10,102 @@
  */
 class Show_Kanren_Posts {
 
+	/**
+	 * Store post id (or comma separated post ids).
+	 *
+	 * @var string|null $post_id
+	 */
 	private $post_id;
+
+	/**
+	 * Store post ids.
+	 *
+	 * @var string[]|null $page_ids
+	 */
 	private $post_ids;
+
+	/**
+	 * Page id.
+	 *
+	 * @var string|null $page_id
+	 */
 	private $page_id;
+
+	/**
+	 * Post url.
+	 *
+	 * @var string|null $post_url
+	 */
 	private $post_url;
+
+	/**
+	 * Page url.
+	 *
+	 * @var string|null $page_url
+	 */
 	private $page_url;
+
+	/**
+	 * TODO: String for date.
+	 *
+	 * @var string|null $date
+	 */
 	private $date;
+
+	/**
+	 * Set date or not.
+	 *
+	 * @var string|null $datenone
+	 */
 	private $datenone;
+
+	/**
+	 * Post order (DESC or ASC).
+	 *
+	 * @var string|null $order
+	 */
 	private $order;
+
+	/**
+	 * Post orderby (date, title, rand, comment_count).
+	 *
+	 * @var string|null $orderby
+	 */
 	private $orderby;
+
+	/**
+	 * Add label class or not.
+	 *
+	 * @var string|null $labelclass
+	 */
 	private $labelclass;
+
+	/**
+	 * Label text (e.g. 関連記事).
+	 *
+	 * @var string|null $labeltext
+	 */
 	private $labeltext;
+
+	/**
+	 * HTML attribute 'target'.
+	 *
+	 * @var string|null $target
+	 */
 	private $target;
+
+	/**
+	 * String 'typesimple' or 'typetext'.
+	 *
+	 * @var string|null $type
+	 */
 	private $type;
+
+	/**
+	 * HTML class name.
+	 *
+	 * @var string|null $classname
+	 */
 	private $classname;
 
 
@@ -35,32 +118,10 @@ class Show_Kanren_Posts {
 	}
 
 	/**
-	 * Initialized or not
-	 *
-	 * @var bool
-	 */
-	private static $initiated = false;
-
-	/**
-	 * Initialization
-	 */
-	public static function init() {
-		if ( ! self::$initiated ) {
-			self::init_hooks();
-		}
-	}
-
-	/**
-	 * Initializes WordPress hooks
-	 */
-	private static function init_hooks() {
-		self::$initiated = true;
-	}
-
-	/**
 	 * Set attributes
 	 *
 	 * @param array|string $atts Attributes in shortcode.
+	 * @param bool         $is_kanren2 Whether shortcode is kanren2.
 	 * @return void
 	 */
 	public function set_atts( $atts, $is_kanren2 = false ) {
@@ -69,10 +130,10 @@ class Show_Kanren_Posts {
 			$this->page_id  = isset( $atts['pageid'] ) ? esc_attr( $atts['pageid'] ) : null;
 			$this->post_url = isset( $atts['posturl'] ) ? esc_url( $atts['posturl'] ) : null;
 			$this->page_url = isset( $atts['pageurl'] ) ? esc_url( $atts['pageurl'] ) : null;
-			if ( $this->post_id === null && $this->post_url !== null ) {
+			if ( null === $this->post_id && null !== $this->post_url ) {
 				$this->post_id = url_to_postid( $this->post_url );
 			}
-			if ( $this->page_id === null && $this->page_url !== null ) {
+			if ( null === $this->page_id && null !== $this->page_url ) {
 				$this->page_id = url_to_postid( $this->page_url );
 			}
 			$this->post_ids   = explode( ',', (string) $this->post_id );
@@ -106,7 +167,7 @@ class Show_Kanren_Posts {
 	 */
 	public function kanren_post( $atts ) {
 		$this->set_atts( $atts );
-		if ( $this->post_id === null && $this->page_id === null ) {
+		if ( null === $this->post_id && null === $this->page_id ) {
 			return '';
 		} else {
 			$out = '<div class="kanren';
@@ -130,15 +191,16 @@ class Show_Kanren_Posts {
 				while ( $the_query->have_posts() ) {
 					$the_query->the_post();
 
-					$post_id   = get_the_ID();
-					$url       = esc_url( get_permalink() );
-					$postimg   = has_post_thumbnail() && ' typetext' !== $this->type
+					$post_id = get_the_ID();
+					$url     = esc_url( get_permalink() );
+					$postimg = has_post_thumbnail() && ' typetext' !== $this->type
 									? sprintf( '<figure class="eyecatch of-cover thum">%s</figure>', $this->get_thumbnail( $post_id ) )
 									: null;
+					// TODO: Determine if the post is a page or a post.
 					$postdate  = ! $this->datenone && ! $this->page_id
 									? sprintf( '<time class="time__date gf">%s</time>', get_the_date( 'Y.m.d' ) )
 									: null;
-					$postlabel = ! ' labelnone' === $this->labelclass
+					$postlabel = ' labelnone' !== $this->labelclass
 									? sprintf( '<span class="labeltext">%s</span>', $this->labeltext )
 									: null;
 					$postttl   = sprintf( '<div class="related_article__ttl ttl">%s%s</div>', $postlabel, esc_attr( get_the_title() ) );
@@ -152,7 +214,7 @@ class Show_Kanren_Posts {
 			} else {
 				$out .= ' nopost"><p>記事を取得できませんでした。記事IDをご確認ください。</p>';
 			}
-			return sprintf('%s</div>', $out);
+			return sprintf( '%s</div>', $out );
 		}
 	}
 
@@ -162,13 +224,13 @@ class Show_Kanren_Posts {
 	 * @param string|array $atts Given values set in shortcode attributes.
 	 * @return string|null
 	 */
-	function kanren2_post( $atts ) {
+	public function kanren2_post( $atts ) {
 		$this->set_atts( $atts, true );
 
 		ob_start();
-		if ( $this->post_id !== null || $this->post_url !== null ) {
+		if ( null !== $this->post_id || null !== $this->post_url ) {
 			echo do_shortcode( '[kanren postid="' . $this->post_id . '" label="none"' . $this->date . $this->order . $this->orderby . $this->type . $this->target . $this->post_url . $this->classname . ']' );
-		} elseif ( $this->page_id !== null || $this->page_url !== null ) {
+		} elseif ( null !== $this->page_id || null !== $this->page_url ) {
 			echo do_shortcode( '[kanren pageid="' . $this->page_id . '" label="none"' . $this->date . $this->order . $this->orderby . $this->type . $this->target . $this->page_url . $this->classname . ']' );
 		} else {
 			null;

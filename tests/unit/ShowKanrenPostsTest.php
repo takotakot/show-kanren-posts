@@ -90,7 +90,7 @@ class ShowKanrenPostsTest extends TestCase {
 	 * Expected: Each post is in single div(class: kanren) tag.
 	 */
 	public function do_shortcode_with_consecutive_postids() {
-		// post1
+		// post1.
 		$post1      = $this->factory()->post->create_and_get(
 			array(
 				'post_title' => 'post1',
@@ -113,7 +113,7 @@ class ShowKanrenPostsTest extends TestCase {
 		$response = sprintf( $format, $post1->ID, $title1, $date1 );
 		$this->assertSame( $response, do_shortcode( $shortcode1 ) );
 
-		// post2
+		// post2.
 		$post2      = $this->factory()->post->create_and_get(
 			array(
 				'post_title' => 'post2',
@@ -142,14 +142,14 @@ class ShowKanrenPostsTest extends TestCase {
 		$format .= '<time class="time__date gf">%s</time>';
 		$format .= '</div></a></div></div>';
 
-		$post1      = $this->factory()->post->create_and_get(
+		$post1 = $this->factory()->post->create_and_get(
 			array(
 				'post_title'   => 'Hello World!1',
 				'post_content' => 'Hello World!1',
 				'post_type'    => 'page',
 			)
 		);
-		$post2      = $this->factory()->post->create_and_get(
+		$post2 = $this->factory()->post->create_and_get(
 			array(
 				'post_title'   => 'Hello World!2',
 				'post_content' => 'Hello World!2',
@@ -159,7 +159,7 @@ class ShowKanrenPostsTest extends TestCase {
 
 		$shortcode = '';
 		$response  = '';
-		foreach( array($post1, $post2) as $post ) {
+		foreach ( array( $post1, $post2 ) as $post ) {
 			$shortcode .= '[kanren postid="' . $post->ID . '"]';
 			$title      = $post->post_title;
 			$date       = date( 'Y.m.d', strtotime( $post->post_date ) );

@@ -140,7 +140,7 @@ class Show_Kanren_Posts {
 	 * @param string|array $atts Given values set in shortcode attributes.
 	 * @return string|null
 	 */
-	function kanren2_post( $atts ) {
+	public function kanren2_post( $atts ) {
 		$this->set_atts( $atts, true );
 
 		ob_start();

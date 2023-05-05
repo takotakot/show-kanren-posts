@@ -130,7 +130,7 @@ class Show_Kanren_Posts {
 			} else {
 				$out .= ' nopost"><p>記事を取得できませんでした。記事IDをご確認ください。</p>';
 			}
-			return sprintf('%s</div>', $out);
+			return sprintf( '%s</div>', $out );
 		}
 	}
 

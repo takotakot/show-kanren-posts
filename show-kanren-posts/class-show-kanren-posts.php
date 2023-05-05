@@ -38,6 +38,7 @@ class Show_Kanren_Posts {
 	 * Set attributes
 	 *
 	 * @param array|string $atts Attributes in shortcode.
+	 * @param bool         $is_kanren2 Whether shortcode is kanren2.
 	 * @return void
 	 */
 	public function set_atts( $atts, $is_kanren2 = false ) {

@@ -47,10 +47,10 @@ class Show_Kanren_Posts {
 			$this->page_id  = isset( $atts['pageid'] ) ? esc_attr( $atts['pageid'] ) : null;
 			$this->post_url = isset( $atts['posturl'] ) ? esc_url( $atts['posturl'] ) : null;
 			$this->page_url = isset( $atts['pageurl'] ) ? esc_url( $atts['pageurl'] ) : null;
-			if ( $this->post_id === null && $this->post_url !== null ) {
+			if ( null === $this->post_id && null !== $this->post_url ) {
 				$this->post_id = url_to_postid( $this->post_url );
 			}
-			if ( $this->page_id === null && $this->page_url !== null ) {
+			if ( null === $this->page_id && null !== $this->page_url ) {
 				$this->page_id = url_to_postid( $this->page_url );
 			}
 			$this->post_ids   = explode( ',', (string) $this->post_id );
@@ -84,7 +84,7 @@ class Show_Kanren_Posts {
 	 */
 	public function kanren_post( $atts ) {
 		$this->set_atts( $atts );
-		if ( $this->post_id === null && $this->page_id === null ) {
+		if ( null === $this->post_id && null === $this->page_id ) {
 			return '';
 		} else {
 			$out = '<div class="kanren';
@@ -144,9 +144,9 @@ class Show_Kanren_Posts {
 		$this->set_atts( $atts, true );
 
 		ob_start();
-		if ( $this->post_id !== null || $this->post_url !== null ) {
+		if ( null !== $this->post_id || null !== $this->post_url ) {
 			echo do_shortcode( '[kanren postid="' . $this->post_id . '" label="none"' . $this->date . $this->order . $this->orderby . $this->type . $this->target . $this->post_url . $this->classname . ']' );
-		} elseif ( $this->page_id !== null || $this->page_url !== null ) {
+		} elseif ( null !== $this->page_id || null !== $this->page_url ) {
 			echo do_shortcode( '[kanren pageid="' . $this->page_id . '" label="none"' . $this->date . $this->order . $this->orderby . $this->type . $this->target . $this->page_url . $this->classname . ']' );
 		} else {
 			null;

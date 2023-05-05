@@ -200,7 +200,7 @@ class Show_Kanren_Posts {
 					$postdate  = ! $this->datenone && ! $this->page_id
 									? sprintf( '<time class="time__date gf">%s</time>', get_the_date( 'Y.m.d' ) )
 									: null;
-					$postlabel = ' labelnone' !== $this->labelclass
+					$postlabel = ! ' labelnone' === $this->labelclass
 									? sprintf( '<span class="labeltext">%s</span>', $this->labeltext )
 									: null;
 					$postttl   = sprintf( '<div class="related_article__ttl ttl">%s%s</div>', $postlabel, esc_attr( get_the_title() ) );

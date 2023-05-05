@@ -10,19 +10,102 @@
  */
 class Show_Kanren_Posts {
 
+	/**
+	 * Store post id (or comma separated post ids).
+	 *
+	 * @var string|null $post_id
+	 */
 	private $post_id;
+
+	/**
+	 * Store post ids.
+	 *
+	 * @var string[]|null $page_ids
+	 */
 	private $post_ids;
+
+	/**
+	 * Page id.
+	 *
+	 * @var string|null $page_id
+	 */
 	private $page_id;
+
+	/**
+	 * Post url.
+	 *
+	 * @var string|null $post_url
+	 */
 	private $post_url;
+
+	/**
+	 * Page url.
+	 *
+	 * @var string|null $page_url
+	 */
 	private $page_url;
+
+	/**
+	 * TODO: String for date.
+	 *
+	 * @var string|null $date
+	 */
 	private $date;
+
+	/**
+	 * Set date or not.
+	 *
+	 * @var string|null $datenone
+	 */
 	private $datenone;
+
+	/**
+	 * Post order (DESC or ASC).
+	 *
+	 * @var string|null $order
+	 */
 	private $order;
+
+	/**
+	 * Post orderby (date, title, rand, comment_count).
+	 *
+	 * @var string|null $orderby
+	 */
 	private $orderby;
+
+	/**
+	 * Add label class or not.
+	 *
+	 * @var string|null $labelclass
+	 */
 	private $labelclass;
+
+	/**
+	 * Label text (e.g. 関連記事).
+	 *
+	 * @var string|null $labeltext
+	 */
 	private $labeltext;
+
+	/**
+	 * HTML attribute 'target'.
+	 *
+	 * @var string|null $target
+	 */
 	private $target;
+
+	/**
+	 * String 'typesimple' or 'typetext'.
+	 *
+	 * @var string|null $type
+	 */
 	private $type;
+
+	/**
+	 * HTML class name.
+	 *
+	 * @var string|null $classname
+	 */
 	private $classname;
 
 
@@ -108,15 +191,16 @@ class Show_Kanren_Posts {
 				while ( $the_query->have_posts() ) {
 					$the_query->the_post();
 
-					$post_id   = get_the_ID();
-					$url       = esc_url( get_permalink() );
-					$postimg   = has_post_thumbnail() && ' typetext' !== $this->type
+					$post_id = get_the_ID();
+					$url     = esc_url( get_permalink() );
+					$postimg = has_post_thumbnail() && ' typetext' !== $this->type
 									? sprintf( '<figure class="eyecatch of-cover thum">%s</figure>', $this->get_thumbnail( $post_id ) )
 									: null;
+					// TODO: Determine if the post is a page or a post.
 					$postdate  = ! $this->datenone && ! $this->page_id
 									? sprintf( '<time class="time__date gf">%s</time>', get_the_date( 'Y.m.d' ) )
 									: null;
-					$postlabel = ! ' labelnone' === $this->labelclass
+					$postlabel = ' labelnone' !== $this->labelclass
 									? sprintf( '<span class="labeltext">%s</span>', $this->labeltext )
 									: null;
 					$postttl   = sprintf( '<div class="related_article__ttl ttl">%s%s</div>', $postlabel, esc_attr( get_the_title() ) );

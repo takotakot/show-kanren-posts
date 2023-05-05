@@ -129,6 +129,50 @@ class ShowKanrenPostsTest extends TestCase {
 	/**
 	 * @test
 	 *
+	 * Story: Give an existing postid.
+	 * Expected: A div tag associated with given postid is returned.
+	 */
+	public function do_shortcode_with_twice() {
+		$format  = '';
+		$format .= '<div class="kanren">';
+		$format .= '<div class="related_article typesimple">';
+		$format .= '<a class="related_article__link no-icon" href="http://localhost/?page_id=%d">';
+		$format .= '<div class="related_article__meta archives_post__meta inbox">';
+		$format .= '<div class="related_article__ttl ttl">%s</div>';
+		$format .= '<time class="time__date gf">%s</time>';
+		$format .= '</div></a></div></div>';
+
+		$post1      = $this->factory()->post->create_and_get(
+			array(
+				'post_title'   => 'Hello World!1',
+				'post_content' => 'Hello World!1',
+				'post_type'    => 'page',
+			)
+		);
+		$post2      = $this->factory()->post->create_and_get(
+			array(
+				'post_title'   => 'Hello World!2',
+				'post_content' => 'Hello World!2',
+				'post_type'    => 'page',
+			)
+		);
+
+		$shortcode = '';
+		$response  = '';
+		foreach( array($post1, $post2) as $post ) {
+			$shortcode .= '[kanren postid="' . $post->ID . '"]';
+			$title      = $post->post_title;
+			$date       = date( 'Y.m.d', strtotime( $post->post_date ) );
+
+			$response .= sprintf( $format, $post->ID, $title, $date );
+		}
+
+		$this->assertSame( $response, do_shortcode( $shortcode ) );
+	}
+
+	/**
+	 * @test
+	 *
 	 * Story: Give a NOT existing postid.
 	 * Expected: A not-found message is returned.
 	 */

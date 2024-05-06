@@ -1,5 +1,5 @@
 === Show Kanren Posts ===
-Contributors: takotakot
+Contributors: takotakot, otokichi3
 Donate link: http://example.com/
 Tags: shortcode
 Requires at least: 3.0.1
